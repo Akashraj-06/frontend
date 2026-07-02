@@ -1,0 +1,405 @@
+/* ============================================================
+   HERO SECTION — Fixly
+   Full-width hero: left text content + right video panel
+   ============================================================ */
+
+.hero {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  position: relative;
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.hero__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  min-height: calc(100vh - var(--navbar-height));
+  gap: 48px;
+}
+
+/* ============================================================
+   LEFT PANEL
+   ============================================================ */
+.hero__content {
+  padding: 60px 0;
+  animation: fadeInLeft 0.7s ease both;
+}
+
+/* Trust Badge */
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: var(--radius-capsule);
+  padding: 7px 14px;
+  margin-bottom: 28px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.hero__badge-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.hero__badge-text {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #92400e;
+  letter-spacing: 0.01em;
+}
+
+/* Headline */
+.hero__headline {
+  font-size: clamp(38px, 4.5vw, 56px);
+  font-weight: var(--weight-black);
+  color: var(--color-black);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s 0.1s ease both;
+}
+
+.hero__headline-accent {
+  color: var(--color-black);
+  position: relative;
+  display: inline;
+}
+
+/* Description */
+.hero__description {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 440px;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.6s 0.2s ease both;
+}
+
+/* CTA Buttons */
+.hero__cta-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+  animation: fadeInUp 0.6s 0.3s ease both;
+}
+
+.hero__btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  padding: 15px 28px;
+  border-radius: var(--radius-capsule);
+  border: 2px solid var(--color-black);
+  transition: background var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+  letter-spacing: -0.01em;
+}
+
+.hero__btn-primary:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.hero__btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  padding: 15px 28px;
+  border-radius: var(--radius-capsule);
+  border: 2px solid var(--color-black);
+  transition: background var(--transition-base), transform var(--transition-fast);
+  letter-spacing: -0.01em;
+}
+
+.hero__btn-secondary:hover {
+  background: var(--color-light-gray);
+  transform: translateY(-2px);
+}
+
+/* Trust Indicators */
+.hero__trust {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  animation: fadeInUp 0.6s 0.4s ease both;
+}
+
+.hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero__trust-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-capsule);
+  background: var(--color-off-white);
+  border: 1.5px solid var(--color-mid-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.hero__trust-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__trust-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-black);
+  line-height: 1.2;
+}
+
+.hero__trust-sub {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  line-height: 1.2;
+}
+
+/* ============================================================
+   RIGHT PANEL — Video
+   ============================================================ */
+.hero__visual {
+  position: relative;
+  height: calc(100vh - var(--navbar-height));
+  display: flex;
+  align-items: center;
+  animation: fadeInRight 0.7s 0.15s ease both;
+}
+
+.hero__video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 90%;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-2xl);
+}
+
+/* Accepted Card — floating at bottom */
+.hero__accepted-card {
+  position: absolute;
+  bottom: 40px;
+  right: -20px;
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 260px;
+  border: 1px solid var(--color-mid-gray);
+  animation: slideInUp 0.7s 0.8s ease both;
+  z-index: 10;
+}
+
+.hero__accepted-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.hero__accepted-online {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.hero__accepted-info {
+  flex: 1;
+}
+
+.hero__accepted-name {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.hero__accepted-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.hero__accepted-meta span {
+  color: #22c55e;
+  font-weight: var(--weight-semibold);
+}
+
+.hero__accepted-btn {
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: var(--radius-capsule);
+  border: 1.5px solid var(--color-border-gray);
+  background: var(--color-white);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.hero__accepted-btn:hover {
+  background: var(--color-light-gray);
+  border-color: var(--color-black);
+}
+
+/* Location Pins floating animation */
+.hero__pin {
+  position: absolute;
+  animation: float 3s ease-in-out infinite;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hero__pin--1 {
+  top: 20%;
+  right: 35%;
+  animation-delay: 0s;
+}
+
+.hero__pin--2 {
+  top: 40%;
+  right: 20%;
+  animation-delay: 1.2s;
+}
+
+.hero__pin-inner {
+  width: 36px;
+  height: 36px;
+  background: var(--color-black);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.hero__pin-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 50% 0;
+  background: var(--color-black);
+  opacity: 0;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.hero__pin-inner svg {
+  transform: rotate(45deg);
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1024px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .hero__content {
+    padding: 40px 0 0;
+  }
+
+  .hero__visual {
+    height: 60vw;
+    min-height: 360px;
+    max-height: 520px;
+  }
+
+  .hero__accepted-card {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .hero__trust {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero__headline {
+    font-size: 34px;
+  }
+
+  .hero__description {
+    font-size: var(--text-base);
+  }
+
+  .hero__cta-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero__btn-primary,
+  .hero__btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero__trust {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .hero__accepted-card {
+    right: 0;
+    min-width: unset;
+    width: calc(100% - 32px);
+    left: 16px;
+  }
+}

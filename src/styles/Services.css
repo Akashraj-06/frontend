@@ -1,0 +1,183 @@
+/* ============================================================
+   SERVICES SECTION — Fixly
+   ============================================================ */
+
+.services {
+  padding: 100px 0;
+  background: var(--color-white);
+}
+
+.services__header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.services__title {
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: var(--weight-black);
+  color: var(--color-black);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.services__subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Grid */
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* Card */
+.services__card {
+  padding: 28px 24px;
+  border-radius: var(--radius-xl);
+  background: var(--color-white);
+  border: 1.5px solid var(--color-mid-gray);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.services__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: background var(--transition-base);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.services__card:hover {
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.services__card:hover::before {
+  background: var(--color-black);
+}
+
+/* Card Icon */
+.services__card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  transition: transform var(--transition-base);
+}
+
+.services__card:hover .services__card-icon {
+  transform: scale(1.08);
+}
+
+/* Icon color variants */
+.services__card--electrical .services__card-icon {
+  background: var(--color-electrical);
+  color: var(--color-electrical-icon);
+}
+
+.services__card--plumbing .services__card-icon {
+  background: var(--color-plumbing);
+  color: var(--color-plumbing-icon);
+}
+
+.services__card--painting .services__card-icon {
+  background: var(--color-painting);
+  color: var(--color-painting-icon);
+}
+
+.services__card--carpentry .services__card-icon {
+  background: var(--color-carpentry);
+  color: var(--color-carpentry-icon);
+}
+
+.services__card--appliance .services__card-icon {
+  background: var(--color-appliance);
+  color: var(--color-appliance-icon);
+}
+
+.services__card--maintenance .services__card-icon {
+  background: var(--color-maintenance);
+  color: var(--color-maintenance-icon);
+}
+
+/* Card Content */
+.services__card-name {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.services__card-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Explore Link */
+.services__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-black);
+  transition: gap var(--transition-fast);
+}
+
+.services__card-link:hover {
+  gap: 10px;
+}
+
+.services__card-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-fast);
+}
+
+.services__card-link:hover svg {
+  transform: translateX(3px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .services {
+    padding: 64px 0;
+  }
+
+  .services__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .services__card {
+    padding: 22px 18px;
+  }
+}

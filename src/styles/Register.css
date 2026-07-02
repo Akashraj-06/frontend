@@ -1,0 +1,164 @@
+/* ============================================================
+   Register Page Styles
+   Reuses login-* classes for shared elements (via Login.css).
+   Only register-specific overrides and additions here.
+   ============================================================ */
+
+.register-card {
+  max-width: 480px;
+}
+
+/* Role selector */
+.register-role-selector {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.register-role-btn {
+  flex: 1;
+  padding: 12px 16px;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border: 1.5px solid var(--color-mid-gray);
+  border-radius: var(--radius-md);
+  background: var(--color-off-white);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+  text-align: center;
+}
+
+.register-role-btn:hover {
+  border-color: var(--color-border-gray);
+  color: var(--color-black);
+}
+
+.register-role-btn--active {
+  border-color: var(--color-black);
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.register-role-btn--active:hover {
+  background: #1a1a1a;
+  color: var(--color-white);
+}
+
+/* Worker fields section */
+.register-worker-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding: var(--spacing-5);
+  background: var(--color-light-gray);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-mid-gray);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.register-worker-fields-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.register-worker-row {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.register-worker-row > .login-field {
+  flex: 1;
+}
+
+/* Success message */
+.register-success {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.register-success-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #22c55e;
+  margin-top: 1px;
+}
+
+.register-success-text {
+  font-size: var(--text-sm);
+  color: #166534;
+  font-weight: var(--weight-medium);
+  line-height: 1.5;
+}
+
+/* Use My Location button */
+.register-geo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: 10px 16px;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border: 1.5px solid var(--color-mid-gray);
+  border-radius: var(--radius-md);
+  background: var(--color-off-white);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.register-geo-btn:hover:not(:disabled) {
+  border-color: var(--color-black);
+  color: var(--color-black);
+}
+
+.register-geo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.register-geo-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.register-geo-spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.register-geo-error {
+  font-size: var(--text-xs);
+  color: #dc2626;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 480px) {
+  .register-card {
+    max-width: 100%;
+  }
+
+  .register-role-selector {
+    flex-direction: column;
+  }
+
+  .register-worker-row {
+    flex-direction: column;
+    gap: var(--spacing-5);
+  }
+}

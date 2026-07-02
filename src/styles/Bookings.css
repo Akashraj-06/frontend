@@ -1,0 +1,459 @@
+/* ============================================================
+   Bookings Page Styles
+   ============================================================ */
+
+.bookings-page {
+  min-height: 100vh;
+  background: var(--color-off-white);
+}
+
+.bookings-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: calc(var(--navbar-height) + var(--spacing-12)) var(--container-padding) var(--spacing-16);
+}
+
+.bookings-header {
+  margin-bottom: var(--spacing-10);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.bookings-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-2);
+}
+
+.bookings-subtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+}
+
+/* Bookings Grid/List */
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  animation: fadeInUp 0.5s ease 0.1s both;
+}
+
+/* Booking Card */
+.booking-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-light-gray);
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.booking-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-gray);
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.booking-info h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin-bottom: 4px;
+}
+
+.booking-date {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: var(--weight-medium);
+}
+
+/* Status Badges */
+.booking-status {
+  padding: 4px 12px;
+  border-radius: var(--radius-capsule);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.booking-status.pending {
+  background-color: var(--color-stat-1);
+  color: var(--color-stat-1-icon);
+  border: 1px solid #fed7aa;
+}
+
+.booking-status.accepted,
+.booking-status.in_progress {
+  background-color: var(--color-stat-3);
+  color: var(--color-stat-3-icon);
+  border: 1px solid #bfdbfe;
+}
+
+.booking-status.completed {
+  background-color: var(--color-stat-2);
+  color: var(--color-stat-2-icon);
+  border: 1px solid #bbf7d0;
+}
+
+.booking-status.cancelled {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Details */
+.booking-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.booking-detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.booking-detail-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.booking-detail-value {
+  font-size: var(--text-sm);
+  color: var(--color-black);
+  line-height: 1.5;
+}
+
+/* Loading/Error/Empty States */
+.bookings-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: var(--spacing-4);
+}
+
+.bookings-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-mid-gray);
+  border-top-color: var(--color-black);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.bookings-error {
+  background: #fef2f2;
+  border: 1.5px dashed #fecaca;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-8) var(--spacing-6);
+  text-align: center;
+  margin-top: var(--spacing-6);
+}
+
+.bookings-error-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: #991b1b;
+  margin-bottom: var(--spacing-2);
+}
+
+.bookings-empty {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-16) var(--spacing-8);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-6);
+}
+
+.bookings-empty-icon {
+  font-size: 40px;
+  margin-bottom: var(--spacing-4);
+  display: block;
+}
+
+.bookings-empty-title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin-bottom: var(--spacing-2);
+}
+
+.bookings-empty-msg {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  max-width: 360px;
+  margin: 0 auto 24px;
+}
+
+@media (max-width: 600px) {
+  .booking-header {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+}
+
+/* ============================================================
+   Rating Action Row
+   ============================================================ */
+
+.booking-rating-action {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.btn-rate-worker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-capsule);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+.btn-rate-worker:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+}
+
+.btn-rate-worker:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   Already Rated Display
+   ============================================================ */
+
+.booking-rating-result {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.rating-stars-display {
+  display: flex;
+  gap: 2px;
+}
+
+.star-display {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.star-display.filled {
+  color: #f59e0b;
+}
+
+.star-display.empty {
+  color: #d1d5db;
+}
+
+.rating-result-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+/* ============================================================
+   Rating Modal
+   ============================================================ */
+
+.rating-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayFadeIn 0.2s ease both;
+  padding: var(--spacing-4);
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.rating-modal-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  padding: var(--spacing-10) var(--spacing-8);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-6);
+  animation: modalSlideIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rating-modal-header {
+  text-align: center;
+}
+
+.rating-modal-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.02em;
+}
+
+.rating-modal-subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Star Picker
+   ============================================================ */
+
+.rating-stars-picker {
+  display: flex;
+  gap: 6px;
+}
+
+.rating-star-btn {
+  background: none;
+  border: none;
+  font-size: 44px;
+  cursor: pointer;
+  color: #d1d5db;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.rating-star-btn:hover,
+.rating-star-btn.active {
+  color: #f59e0b;
+  transform: scale(1.15);
+}
+
+.rating-label-text {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #d97706;
+  margin-top: calc(var(--spacing-2) * -1);
+}
+
+/* ============================================================
+   Modal Error
+   ============================================================ */
+
+.rating-modal-error {
+  width: 100%;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--text-sm);
+  color: #b91c1c;
+  text-align: center;
+}
+
+/* ============================================================
+   Modal Buttons
+   ============================================================ */
+
+.rating-modal-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  width: 100%;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border-gray);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-modal-cancel:hover:not(:disabled) {
+  background: var(--color-off-white);
+  border-color: var(--color-text-tertiary);
+}
+
+.btn-modal-submit {
+  flex: 2;
+  padding: 10px 20px;
+  background: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.btn-modal-submit:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.btn-modal-submit:disabled,
+.btn-modal-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .rating-modal-card {
+    padding: var(--spacing-8) var(--spacing-6);
+  }
+
+  .rating-star-btn {
+    font-size: 36px;
+  }
+
+  .rating-modal-actions {
+    flex-direction: column;
+  }
+}
+
