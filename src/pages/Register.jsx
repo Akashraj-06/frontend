@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { register } from '../api/auth';
+import { getCategories } from '../api/service';
 import '../styles/Login.css';
 import '../styles/Register.css';
 
@@ -33,6 +34,17 @@ export default function Register() {
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoError, setGeoError] = useState('');
 
+  // Categories for worker registration dropdown
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
+
+  useEffect(() => {
+    setCategoriesLoading(true);
+    getCategories()
+      .then(setCategories)
+      .finally(() => setCategoriesLoading(false));
+  }, []);
+
   const isWorker = form.role === 'WORKER';
 
   const validate = () => {
@@ -47,7 +59,7 @@ export default function Register() {
     if (!form.phone.trim()) newErrors.phone = 'Phone is required';
 
     if (isWorker) {
-      if (!form.categoryId) newErrors.categoryId = 'Category ID is required';
+      if (!form.categoryId) newErrors.categoryId = 'Please select a service category.';
       if (!form.latitude) newErrors.latitude = 'Latitude is required';
       if (!form.longitude) newErrors.longitude = 'Longitude is required';
     }
@@ -327,20 +339,26 @@ export default function Register() {
             <div className="register-worker-fields">
               <span className="register-worker-fields-title">Worker Details</span>
 
-              {/* Category ID */}
+              {/* Service Category Dropdown */}
               <div className="login-field">
-                <label className="login-label" htmlFor="register-category">Category ID</label>
+                <label className="login-label" htmlFor="register-category">Service Category</label>
                 <div className="login-input-wrapper">
-                  <input
+                  <select
                     id="register-category"
-                    className={`login-input${errors.categoryId ? ' login-input--error' : ''}`}
-                    type="number"
+                    className={`login-input register-category-select${errors.categoryId ? ' login-input--error' : ''}`}
                     name="categoryId"
-                    placeholder="e.g. 1"
                     value={form.categoryId}
                     onChange={handleChange}
-                    disabled={loading}
-                  />
+                    disabled={loading || categoriesLoading}
+                    aria-label="Select your service category"
+                  >
+                    <option value="">Select your service category</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 {errors.categoryId && <span className="login-field-error">{errors.categoryId}</span>}
               </div>
