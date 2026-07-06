@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { register } from '../api/auth';
 import { getCategories } from '../api/service';
@@ -38,12 +38,90 @@ export default function Register() {
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
 
+  // Custom Dropdown State & Refs
+  const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const dropdownRef = useRef(null);
+
   useEffect(() => {
     setCategoriesLoading(true);
     getCategories()
       .then(setCategories)
       .finally(() => setCategoriesLoading(false));
   }, []);
+
+  // Click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleSelectCategory = (categoryId) => {
+    setForm((prev) => ({ ...prev, categoryId }));
+    if (errors.categoryId) setErrors((prev) => ({ ...prev, categoryId: '' }));
+    if (apiError) setApiError('');
+    if (success) setSuccess('');
+    setIsOpen(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (loading || categoriesLoading) return;
+    const totalItems = categories.length + 1; // categories + placeholder
+
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (!isOpen) {
+          setIsOpen(true);
+          const selectedIdx = categories.findIndex(c => String(c.id) === String(form.categoryId));
+          setHighlightedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 0);
+        } else {
+          if (highlightedIndex === 0) {
+            handleSelectCategory('');
+          } else if (highlightedIndex > 0 && highlightedIndex < totalItems) {
+            handleSelectCategory(categories[highlightedIndex - 1].id);
+          }
+        }
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        if (!isOpen) {
+          setIsOpen(true);
+          const selectedIdx = categories.findIndex(c => String(c.id) === String(form.categoryId));
+          setHighlightedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 0);
+        } else {
+          setHighlightedIndex((prev) => (prev + 1) % totalItems);
+        }
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        if (!isOpen) {
+          setIsOpen(true);
+          const selectedIdx = categories.findIndex(c => String(c.id) === String(form.categoryId));
+          setHighlightedIndex(selectedIdx >= 0 ? selectedIdx + 1 : totalItems - 1);
+        } else {
+          setHighlightedIndex((prev) => (prev - 1 + totalItems) % totalItems);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setIsOpen(false);
+        break;
+      case 'Tab':
+        setIsOpen(false);
+        break;
+      default:
+        break;
+    }
+  };
 
   const isWorker = form.role === 'WORKER';
 
@@ -341,24 +419,62 @@ export default function Register() {
 
               {/* Service Category Dropdown */}
               <div className="login-field">
-                <label className="login-label" htmlFor="register-category">Service Category</label>
-                <div className="login-input-wrapper">
-                  <select
+                <label className="login-label">Service Category</label>
+                <div className="login-input-wrapper" ref={dropdownRef}>
+                  <button
+                    type="button"
                     id="register-category"
-                    className={`login-input register-category-select${errors.categoryId ? ' login-input--error' : ''}`}
-                    name="categoryId"
-                    value={form.categoryId}
-                    onChange={handleChange}
+                    className={`login-input custom-dropdown-trigger${errors.categoryId ? ' login-input--error' : ''}${isOpen ? ' custom-dropdown-trigger--open' : ''}`}
+                    onClick={() => !loading && !categoriesLoading && setIsOpen(prev => !prev)}
+                    onKeyDown={handleKeyDown}
                     disabled={loading || categoriesLoading}
+                    aria-haspopup="listbox"
+                    aria-expanded={isOpen}
                     aria-label="Select your service category"
                   >
-                    <option value="">Select your service category</option>
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
+                    <span className="custom-dropdown-value">
+                      {categories.find(cat => String(cat.id) === String(form.categoryId))?.name || 'Select your service category'}
+                    </span>
+                    <span className="custom-dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
+                  </button>
+
+                  {isOpen && (
+                    <ul 
+                      className="custom-dropdown-menu" 
+                      role="listbox"
+                      aria-label="Service Category options"
+                    >
+                      <li
+                        className={`custom-dropdown-item custom-dropdown-placeholder-option${String(form.categoryId) === '' ? ' custom-dropdown-item--selected' : ''}${highlightedIndex === 0 ? ' custom-dropdown-item--highlighted' : ''}`}
+                        role="option"
+                        aria-selected={String(form.categoryId) === ''}
+                        onClick={() => handleSelectCategory('')}
+                        onMouseEnter={() => setHighlightedIndex(0)}
+                      >
+                        <span>▼ Select your service category</span>
+                        {String(form.categoryId) === '' && <span className="custom-dropdown-item-selected-badge">✓ Selected</span>}
+                      </li>
+                      <li className="custom-dropdown-divider" role="presentation" />
+                      {categories.map((cat, index) => {
+                        const actualIndex = index + 1;
+                        const isSelected = String(cat.id) === String(form.categoryId);
+                        const isHighlighted = highlightedIndex === actualIndex;
+                        return (
+                          <li
+                            key={cat.id}
+                            className={`custom-dropdown-item${isSelected ? ' custom-dropdown-item--selected' : ''}${isHighlighted ? ' custom-dropdown-item--highlighted' : ''}`}
+                            role="option"
+                            aria-selected={isSelected}
+                            onClick={() => handleSelectCategory(cat.id)}
+                            onMouseEnter={() => setHighlightedIndex(actualIndex)}
+                          >
+                            <span className="custom-dropdown-item-name">{cat.name}</span>
+                            {isSelected && <span className="custom-dropdown-item-selected-badge">✓ Selected</span>}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
                 {errors.categoryId && <span className="login-field-error">{errors.categoryId}</span>}
               </div>
