@@ -1,0 +1,122 @@
+/* ============================================================
+   ABOUT US SECTION — Fixly
+   ============================================================ */
+
+.about-us {
+  padding: 100px 0;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-light-gray);
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.about-us__inner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-us__title {
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: var(--weight-black);
+  color: var(--color-black);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.about-us__desc {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-8);
+}
+
+.about-us__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.about-us__feature {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+
+.about-us__feature-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  background: var(--color-light-gray);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-us__feature h4 {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin-bottom: 4px;
+}
+
+.about-us__feature p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Visual Card */
+.about-us__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.about-us__card {
+  background: var(--color-black);
+  color: var(--color-white);
+  padding: var(--spacing-10) var(--spacing-8);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  position: relative;
+}
+
+.about-us__card h3 {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-black);
+  margin-bottom: var(--spacing-4);
+  letter-spacing: -0.02em;
+}
+
+.about-us__card p {
+  font-size: var(--text-base);
+  color: var(--color-border-gray);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .about-us__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .about-us__visual {
+    order: -1;
+  }
+
+  .about-us__card {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-us {
+    padding: 64px 0;
+  }
+}

@@ -1,18 +1,25 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { register } from '../api/auth';
 import '../styles/Login.css';
 import '../styles/Register.css';
 
 export default function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const getInitialRole = () => {
+    const params = new URLSearchParams(location.search);
+    const roleParam = params.get('role');
+    return roleParam === 'worker' ? 'WORKER' : 'CUSTOMER';
+  };
 
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
     phone: '',
-    role: 'CUSTOMER',
+    role: getInitialRole(),
     categoryId: '',
     latitude: '',
     longitude: '',
@@ -105,6 +112,7 @@ export default function Register() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setApiError('Please fill all required fields.');
       return;
     }
 

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import '../styles/Services.css';
 
 const services = [
@@ -53,6 +54,14 @@ const ArrowIcon = () => (
 );
 
 export default function Services() {
+  const navigate = useNavigate();
+
+  const handleExplore = (categoryName) => {
+    navigate(`/nearby-workers?category=${encodeURIComponent(categoryName)}`, {
+      state: { category: categoryName }
+    });
+  };
+
   return (
     <section className="services" id="services" aria-label="Services section">
       <div className="container">
@@ -84,6 +93,7 @@ export default function Services() {
                 className="services__card-link"
                 id={`service-explore-${service.id}`}
                 aria-label={`Explore ${service.name} service`}
+                onClick={() => handleExplore(service.name)}
               >
                 Explore Service
                 <ArrowIcon />

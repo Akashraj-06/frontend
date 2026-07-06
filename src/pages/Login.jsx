@@ -76,14 +76,23 @@ export default function Login() {
       if (err.response) {
         // Backend returned an error response
         const data = err.response.data;
-        const message =
+        let message =
           typeof data === 'string'
             ? data
-            : data.message || data.error || 'Invalid email or password';
+            : data.message || data.error || 'Invalid credentials.';
+        
+        if (
+          err.response.status === 401 ||
+          err.response.status === 403 ||
+          message.toLowerCase().includes('internal server error') ||
+          message.toLowerCase().includes('bad credentials')
+        ) {
+          message = 'Invalid credentials.';
+        }
         setApiError(message);
       } else if (err.request) {
         // Network error — no response received
-        setApiError('Unable to reach the server. Please check your connection and try again.');
+        setApiError('Unable to connect to server.');
       } else {
         setApiError('An unexpected error occurred. Please try again.');
       }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import CustomDialog from '../components/CustomDialog';
 import { getWorkerJobs, acceptJob, completeJob } from '../api/job';
 import '../styles/WorkerDashboard.css';
 
@@ -10,6 +11,40 @@ export default function WorkerDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(null); // Tracks ID of job currently being processed
+
+  const [dialogConfig, setDialogConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'alert',
+    onConfirm: null,
+    onCancel: null
+  });
+
+  const showConfirm = (message, onConfirm) => {
+    setDialogConfig({
+      isOpen: true,
+      title: 'Confirm Action',
+      message,
+      type: 'confirm',
+      onConfirm: () => {
+        setDialogConfig(prev => ({ ...prev, isOpen: false }));
+        onConfirm();
+      },
+      onCancel: () => setDialogConfig(prev => ({ ...prev, isOpen: false }))
+    });
+  };
+
+  const showAlert = (message) => {
+    setDialogConfig({
+      isOpen: true,
+      title: 'Notification',
+      message,
+      type: 'alert',
+      onConfirm: () => setDialogConfig(prev => ({ ...prev, isOpen: false })),
+      onCancel: () => setDialogConfig(prev => ({ ...prev, isOpen: false }))
+    });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -51,40 +86,40 @@ export default function WorkerDashboard() {
     }
   };
 
-  const handleAccept = async (serviceRequestId) => {
-    if (!window.confirm('Are you sure you want to accept this service request?')) return;
-    
-    setActionLoading(serviceRequestId);
-    try {
-      await acceptJob(serviceRequestId);
-      await fetchJobs(); // Refresh jobs list
-    } catch (err) {
-      let msg = 'Failed to accept job.';
-      if (err.response) {
-        msg = err.response.data?.message || err.response.data || msg;
+  const handleAccept = (serviceRequestId) => {
+    showConfirm('Are you sure you want to accept this service request?', async () => {
+      setActionLoading(serviceRequestId);
+      try {
+        await acceptJob(serviceRequestId);
+        await fetchJobs(); // Refresh jobs list
+      } catch (err) {
+        let msg = 'Failed to accept job.';
+        if (err.response) {
+          msg = err.response.data?.message || err.response.data || msg;
+        }
+        showAlert(msg);
+      } finally {
+        setActionLoading(null);
       }
-      alert(msg);
-    } finally {
-      setActionLoading(null);
-    }
+    });
   };
 
-  const handleComplete = async (jobAssignmentId, serviceRequestId) => {
-    if (!window.confirm('Are you sure you want to mark this job as completed?')) return;
-    
-    setActionLoading(serviceRequestId);
-    try {
-      await completeJob(jobAssignmentId);
-      await fetchJobs(); // Refresh jobs list
-    } catch (err) {
-      let msg = 'Failed to complete job.';
-      if (err.response) {
-        msg = err.response.data?.message || err.response.data || msg;
+  const handleComplete = (jobAssignmentId, serviceRequestId) => {
+    showConfirm('Are you sure you want to mark this job as completed?', async () => {
+      setActionLoading(serviceRequestId);
+      try {
+        await completeJob(jobAssignmentId);
+        await fetchJobs(); // Refresh jobs list
+      } catch (err) {
+        let msg = 'Failed to complete job.';
+        if (err.response) {
+          msg = err.response.data?.message || err.response.data || msg;
+        }
+        showAlert(msg);
+      } finally {
+        setActionLoading(null);
       }
-      alert(msg);
-    } finally {
-      setActionLoading(null);
-    }
+    });
   };
 
   const formatDate = (dateString) => {
@@ -223,6 +258,14 @@ export default function WorkerDashboard() {
           </>
         )}
       </div>
+      <CustomDialog
+        isOpen={dialogConfig.isOpen}
+        title={dialogConfig.title}
+        message={dialogConfig.message}
+        type={dialogConfig.type}
+        onConfirm={dialogConfig.onConfirm}
+        onCancel={dialogConfig.onCancel}
+      />
     </div>
   );
 }

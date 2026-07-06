@@ -351,3 +351,97 @@
     width: 100%;
   }
 }
+
+/* ============================================================
+   Category Filter Banner
+   ============================================================ */
+.workers-filter-banner {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-white);
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-mid-gray);
+  margin-bottom: var(--spacing-5);
+  box-shadow: var(--shadow-xs);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.workers-filter-text {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+}
+
+.workers-filter-clear-btn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.workers-filter-clear-btn:hover {
+  background: #fee2e2;
+}
+
+/* ============================================================
+   Skeleton Loaders
+   ============================================================ */
+.worker-card.skeleton {
+  pointer-events: none;
+  border-color: var(--color-light-gray);
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeleton-line {
+  height: 12px;
+  background: #e4e4e4;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-title {
+  width: 120px;
+  height: 16px;
+  margin-bottom: 6px;
+}
+
+.skeleton-sub {
+  width: 80px;
+  height: 12px;
+}
+
+.skeleton-detail {
+  height: 20px;
+  margin-top: 4px;
+}
+
+.skeleton-button {
+  height: 38px;
+  background: #e4e4e4;
+  border-radius: var(--radius-capsule);
+  margin-top: auto;
+}
+
+.worker-card.skeleton .worker-avatar {
+  background: #e4e4e4;
+}
+
+.worker-card.skeleton .worker-details {
+  border-top-color: var(--color-light-gray);
+  border-bottom-color: var(--color-light-gray);
+}

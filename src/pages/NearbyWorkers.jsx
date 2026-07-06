@@ -1,12 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import BookingModal from '../components/BookingModal';
 import { getNearbyWorkers } from '../api/worker';
 import '../styles/NearbyWorkers.css';
 
+const categoryDisplayName = {
+  'Electrical': 'Electricians',
+  'Plumbing': 'Plumbers',
+  'Painting': 'Painters',
+  'Carpentry': 'Carpenters',
+  'Appliance Repair': 'Appliance Repair Workers',
+  'Home Maintenance': 'Home Maintenance Workers'
+};
+
 export default function NearbyWorkers() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Location inputs (Default to Chennai fallback coords)
   const [lat, setLat] = useState('13.0827');
@@ -18,10 +28,17 @@ export default function NearbyWorkers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [geolocationStatus, setGeolocationStatus] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category') || location.state?.category || '';
+    setCategoryFilter(cat);
+  }, [location]);
 
   const fetchWorkers = async (searchLat, searchLng, searchRadius) => {
     setLoading(true);
@@ -40,12 +57,15 @@ export default function NearbyWorkers() {
       const data = await getNearbyWorkers(latitude, longitude, radiusVal);
       setWorkers(data);
     } catch (err) {
-      let msg = 'Failed to load nearby workers from the server.';
+      let msg = 'Unable to connect to server.';
       if (err.response) {
         const responseData = err.response.data;
         msg = typeof responseData === 'string' ? responseData : responseData.message || responseData.error || msg;
+        if (msg.toLowerCase().includes('internal server error')) {
+          msg = 'Unable to connect to server.';
+        }
       } else if (err.request) {
-        msg = 'Unable to connect to the server. Please check your internet connection.';
+        msg = 'Unable to connect to server.';
       }
       setError(msg);
     } finally {
@@ -57,7 +77,6 @@ export default function NearbyWorkers() {
   const detectLocation = () => {
     if (!navigator.geolocation) {
       setGeolocationStatus('Geolocation is not supported by your browser.');
-      // Fetch default location workers
       fetchWorkers(lat, lng, radius);
       return;
     }
@@ -73,11 +92,15 @@ export default function NearbyWorkers() {
         fetchWorkers(detectedLat, detectedLng, radius);
       },
       (err) => {
-        let errorMsg = 'Location access denied by user. Using default coordinates.';
-        if (err.code === 2) errorMsg = 'Location position unavailable. Using default coordinates.';
-        if (err.code === 3) errorMsg = 'Location request timed out. Using default coordinates.';
+        let errorMsg = 'Please enable location permission.';
+        if (err.code === 1) {
+          errorMsg = 'Please enable location permission.';
+        } else if (err.code === 2) {
+          errorMsg = 'Location position unavailable. Using default coordinates.';
+        } else if (err.code === 3) {
+          errorMsg = 'Location request timed out. Using default coordinates.';
+        }
         setGeolocationStatus(errorMsg);
-        // Fallback fetch
         fetchWorkers(lat, lng, radius);
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
@@ -89,18 +112,21 @@ export default function NearbyWorkers() {
     const storedUser = localStorage.getItem('user');
 
     if (!token || !storedUser) {
-      // Force redirect to login page if unauthenticated
       navigate('/login');
       return;
     }
 
-    // Try to auto-detect location on load
     detectLocation();
   }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchWorkers(lat, lng, radius);
+  };
+
+  const handleClearFilter = () => {
+    setCategoryFilter('');
+    navigate('/nearby-workers', { replace: true, state: {} });
   };
 
   const getInitials = (name) => {
@@ -111,6 +137,14 @@ export default function NearbyWorkers() {
       .join('')
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const filteredWorkers = categoryFilter
+    ? workers.filter(w => w.categoryName?.toLowerCase() === categoryFilter.toLowerCase())
+    : workers;
+
+  const getFilterText = (cat) => {
+    return categoryDisplayName[cat] || `${cat} Workers`;
   };
 
   return (
@@ -192,19 +226,48 @@ export default function NearbyWorkers() {
           </form>
 
           {geolocationStatus && (
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: 'var(--spacing-3)' }}>
+            <p style={{ 
+              fontSize: 'var(--text-xs)', 
+              color: geolocationStatus.includes('permission') ? '#b91c1c' : 'var(--color-text-secondary)', 
+              marginTop: 'var(--spacing-3)',
+              fontWeight: geolocationStatus.includes('permission') ? '600' : 'normal'
+            }}>
               ℹ️ {geolocationStatus}
             </p>
           )}
         </div>
 
+        {categoryFilter && !loading && (
+          <div className="workers-filter-banner">
+            <span className="workers-filter-text">Showing: {getFilterText(categoryFilter)}</span>
+            <button className="workers-filter-clear-btn" onClick={handleClearFilter}>
+              Clear Filter &times;
+            </button>
+          </div>
+        )}
+
         {/* Worker Cards Grid */}
         <div className="workers-grid">
           {loading && (
-            <div className="workers-loading" role="status">
-              <div className="workers-spinner" />
-              <p>Searching for nearby workers…</p>
-            </div>
+            <>
+              {[1, 2, 3, 4].map((n) => (
+                <div className="worker-card skeleton" key={n}>
+                  <div className="worker-header">
+                    <div className="worker-avatar skeleton-shimmer" />
+                    <div className="worker-meta">
+                      <div className="skeleton-line skeleton-title skeleton-shimmer" />
+                      <div className="skeleton-line skeleton-sub skeleton-shimmer" />
+                    </div>
+                  </div>
+                  <div className="worker-details">
+                    <div className="skeleton-line skeleton-detail skeleton-shimmer" />
+                    <div className="skeleton-line skeleton-detail skeleton-shimmer" />
+                    <div className="skeleton-line skeleton-detail skeleton-shimmer" />
+                  </div>
+                  <div className="skeleton-button skeleton-shimmer" />
+                </div>
+              ))}
+            </>
           )}
 
           {!loading && error && (
@@ -217,14 +280,27 @@ export default function NearbyWorkers() {
           {!loading && !error && workers.length === 0 && (
             <div className="workers-empty">
               <span className="workers-empty-icon" aria-hidden="true">🕵️‍♂️</span>
-              <h2 className="workers-empty-title">No Workers Found</h2>
+              <h2 className="workers-empty-title">No nearby workers found.</h2>
               <p className="workers-empty-msg">
                 We couldn&apos;t find any available service workers within the {radius} km radius of your location. Try expanding your search radius.
               </p>
             </div>
           )}
 
-          {!loading && !error && workers.length > 0 && workers.map((worker) => (
+          {!loading && !error && workers.length > 0 && filteredWorkers.length === 0 && (
+            <div className="workers-empty">
+              <span className="workers-empty-icon" aria-hidden="true">🕵️‍♂️</span>
+              <h2 className="workers-empty-title">No nearby workers found.</h2>
+              <p className="workers-empty-msg">
+                We couldn&apos;t find any available service workers for category &quot;{categoryFilter}&quot; within the {radius} km radius.
+              </p>
+              <button className="workers-btn workers-btn--primary" onClick={handleClearFilter} style={{ marginTop: '16px' }}>
+                Clear Filter
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && filteredWorkers.length > 0 && filteredWorkers.map((worker) => (
             <div className="worker-card" key={worker.workerId}>
               {/* Header */}
               <div className="worker-header">

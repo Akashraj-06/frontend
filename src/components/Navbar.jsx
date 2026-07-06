@@ -55,6 +55,14 @@ export default function Navbar() {
     setMobileOpen(false);
   };
 
+  const handleNavClick = (id) => {
+    if (window.location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: id } });
+    } else {
+      scrollTo(id);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -100,16 +108,16 @@ export default function Navbar() {
               </div>
             </li>
             <li>
-              <button className="navbar__link" onClick={() => scrollTo('services')} id="nav-become-worker">Become a Worker</button>
+              <Link to="/register?role=worker" className="navbar__link" id="nav-become-worker">Become a Worker</Link>
             </li>
             <li>
-              <button className="navbar__link" onClick={() => scrollTo('howitworks')} id="nav-how-it-works">How It Works</button>
+              <button className="navbar__link" onClick={() => handleNavClick('howitworks')} id="nav-how-it-works">How It Works</button>
             </li>
             <li>
-              <button className="navbar__link" id="nav-about">About Us</button>
+              <button className="navbar__link" onClick={() => handleNavClick('about')} id="nav-about">About Us</button>
             </li>
             <li>
-              <button className="navbar__link" id="nav-contact">Contact</button>
+              <button className="navbar__link" onClick={() => handleNavClick('contact')} id="nav-contact">Contact</button>
             </li>
           </ul>
 
@@ -152,10 +160,10 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div className={`navbar__mobile${mobileOpen ? ' open' : ''}`} aria-hidden={!mobileOpen}>
         <div className="navbar__mobile-link">Services</div>
-        <button className="navbar__mobile-link" onClick={() => scrollTo('services')}>Become a Worker</button>
-        <button className="navbar__mobile-link" onClick={() => scrollTo('howitworks')}>How It Works</button>
-        <button className="navbar__mobile-link" onClick={() => setMobileOpen(false)}>About Us</button>
-        <button className="navbar__mobile-link" onClick={() => setMobileOpen(false)}>Contact</button>
+        <Link to="/register?role=worker" className="navbar__mobile-link" onClick={() => setMobileOpen(false)}>Become a Worker</Link>
+        <button className="navbar__mobile-link" onClick={() => handleNavClick('howitworks')}>How It Works</button>
+        <button className="navbar__mobile-link" onClick={() => handleNavClick('about')}>About Us</button>
+        <button className="navbar__mobile-link" onClick={() => handleNavClick('contact')}>Contact</button>
         <div style={{ borderTop: '1px solid var(--color-mid-gray)', margin: '8px 0' }} />
         {isLoggedIn ? (
           <>

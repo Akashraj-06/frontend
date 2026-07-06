@@ -53,9 +53,9 @@ export default function Hero() {
                 <polyline points="12 5 19 12 12 19" />
               </svg>
             </Link>
-            <button className="hero__btn-secondary" id="hero-become-worker" aria-label="Become a worker">
+            <Link to="/register?role=worker" className="hero__btn-secondary" id="hero-become-worker" aria-label="Become a worker">
               Become a Worker
-            </button>
+            </Link>
           </div>
 
           {/* Trust Indicators */}
@@ -119,27 +119,6 @@ export default function Hero() {
               {/* Fallback */}
               <img src="/fallback-hero.jpg" alt="Fixly service workers in a modern city" />
             </video>
-          </div>
-
-          {/* Accepted Worker Card */}
-          <div className="hero__accepted-card" role="status" aria-label="Electrician accepted notification">
-            <div className="hero__accepted-avatar" aria-hidden="true">
-              👨‍🔧
-              <span className="hero__accepted-online" aria-hidden="true" />
-            </div>
-            <div className="hero__accepted-info">
-              <div className="hero__accepted-name">Electrician Accepted</div>
-              <div className="hero__accepted-meta">
-                2 mins away &nbsp;•&nbsp; <span>Verified</span>
-              </div>
-            </div>
-            <button className="hero__accepted-btn" id="hero-track-now" aria-label="Track worker now">
-              Track Now
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>

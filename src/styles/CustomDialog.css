@@ -1,0 +1,111 @@
+/* ============================================================
+   Custom Dialog/Modal - Fixly
+   ============================================================ */
+
+.custom-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.custom-dialog-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  width: 90%;
+  max-width: 440px;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid var(--color-light-gray);
+}
+
+.custom-dialog-header {
+  padding: var(--spacing-5) var(--spacing-6);
+  border-bottom: 1px solid var(--color-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.custom-dialog-header h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-black);
+  margin: 0;
+}
+
+.custom-dialog-close {
+  font-size: 24px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  line-height: 1;
+}
+
+.custom-dialog-close:hover {
+  color: var(--color-black);
+}
+
+.custom-dialog-body {
+  padding: var(--spacing-6);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.custom-dialog-footer {
+  padding: var(--spacing-4) var(--spacing-6);
+  background: var(--color-off-white);
+  border-top: 1px solid var(--color-light-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+}
+
+.custom-dialog-btn {
+  padding: 10px 18px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-capsule);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.custom-dialog-btn-cancel {
+  background: var(--color-white);
+  color: var(--color-black);
+  border: 1.5px solid var(--color-black);
+}
+
+.custom-dialog-btn-cancel:hover {
+  background: var(--color-light-gray);
+}
+
+.custom-dialog-btn-confirm {
+  background: var(--color-black);
+  color: var(--color-white);
+  border: 1.5px solid var(--color-black);
+}
+
+.custom-dialog-btn-confirm:hover {
+  background: #1a1a1a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
