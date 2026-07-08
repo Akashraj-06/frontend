@@ -208,6 +208,8 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 1;
+  filter: none;
 }
 
 /* Gradient mask to blend into white background on the left */
@@ -217,10 +219,9 @@
   background: linear-gradient(
     to right,
     var(--color-white) 0%,
-    rgba(255, 255, 255, 0.95) 8%,
-    rgba(255, 255, 255, 0.8) 18%,
-    rgba(255, 255, 255, 0.3) 35%,
-    transparent 65%
+    rgba(255, 255, 255, 0.9) 8%,
+    rgba(255, 255, 255, 0.4) 18%,
+    transparent 30%
   );
   pointer-events: none;
   z-index: 2;
@@ -230,7 +231,7 @@
 .hero__overlay-warm {
   position: absolute;
   inset: 0;
-  background: rgba(251, 191, 36, 0.04); /* Subtle warm amber tint */
+  background: rgba(251, 191, 36, 0.015); /* Subtle warm amber tint */
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 3;
@@ -410,8 +411,7 @@
       to bottom,
       var(--color-white) 0%,
       rgba(255, 255, 255, 0.8) 12%,
-      rgba(255, 255, 255, 0.2) 30%,
-      transparent 70%
+      transparent 35%
     );
   }
 
