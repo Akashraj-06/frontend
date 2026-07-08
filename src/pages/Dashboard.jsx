@@ -51,7 +51,13 @@ export default function Dashboard() {
         <div className="dashboard-welcome">
           {/* Greeting */}
           <div className="dashboard-greeting">
-            <div className="dashboard-avatar">{initials}</div>
+            {user.profileImageUrl ? (
+              <div className="dashboard-avatar-img-container">
+                <img src={user.profileImageUrl} alt="Profile" className="dashboard-avatar-img" />
+              </div>
+            ) : (
+              <div className="dashboard-avatar">{initials}</div>
+            )}
             <div className="dashboard-greeting-text">
               <h1>Welcome, {user.name}</h1>
               <p>Here&apos;s your account overview</p>

@@ -24,6 +24,8 @@ export default function Navbar() {
   }, []);
 
   const [userRole, setUserRole] = useState(null);
+  const [userAvatar, setUserAvatar] = useState(null);
+  const [userInitials, setUserInitials] = useState('?');
 
   // Check auth status on mount and when localStorage changes
   useEffect(() => {
@@ -32,19 +34,35 @@ export default function Navbar() {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         try {
-          setUserRole(JSON.parse(storedUser).role);
+          const parsed = JSON.parse(storedUser);
+          setUserRole(parsed.role);
+          setUserAvatar(parsed.profileImageUrl || null);
+          if (parsed.name) {
+            const initials = parsed.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            setUserInitials(initials);
+          } else {
+            setUserInitials('?');
+          }
         } catch {
           setUserRole(null);
+          setUserAvatar(null);
+          setUserInitials('?');
         }
       } else {
         setUserRole(null);
+        setUserAvatar(null);
+        setUserInitials('?');
       }
     };
     checkAuth();
 
-    // Listen for storage events (cross-tab sync)
+    // Listen for storage events and custom profile-updated events
     window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
+    window.addEventListener('profile-updated', checkAuth);
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('profile-updated', checkAuth);
+    };
   }, []);
 
   const toggleMobile = () => setMobileOpen(prev => !prev);
@@ -125,6 +143,13 @@ export default function Navbar() {
           <div className="navbar__actions">
             {isLoggedIn ? (
               <>
+                <Link to="/profile" className="navbar__avatar-container" title="My Profile" id="nav-profile-avatar">
+                  {userAvatar ? (
+                    <img src={userAvatar} alt="Profile" className="navbar__avatar-img" />
+                  ) : (
+                    <div className="navbar__avatar-fallback">{userInitials}</div>
+                  )}
+                </Link>
                 <Link 
                   to={userRole === 'WORKER' ? "/worker-dashboard" : "/dashboard"} 
                   className="navbar__btn-login" 
@@ -167,6 +192,7 @@ export default function Navbar() {
         <div style={{ borderTop: '1px solid var(--color-mid-gray)', margin: '8px 0' }} />
         {isLoggedIn ? (
           <>
+            <Link to="/profile" className="navbar__mobile-link" onClick={() => setMobileOpen(false)}>My Profile</Link>
             <Link 
               to={userRole === 'WORKER' ? "/worker-dashboard" : "/dashboard"} 
               className="navbar__mobile-link" 

@@ -108,6 +108,14 @@ export default function WorkerDashboard() {
         navigate('/dashboard'); // Customers get redirected back
         return;
       }
+      setUserName(user.name || '');
+      setUserAvatar(user.profileImageUrl || null);
+      if (user.name) {
+        const initials = user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        setUserInitials(initials);
+      } else {
+        setUserInitials('?');
+      }
     } catch {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -192,8 +200,21 @@ export default function WorkerDashboard() {
 
       <div className="worker-dashboard-content">
         <header className="worker-dashboard-header">
-          <h1 className="worker-dashboard-title">Worker Dashboard</h1>
-          <p className="worker-dashboard-subtitle">Manage and track your assigned jobs</p>
+          <div className="worker-dashboard-welcome-section">
+            {userAvatar ? (
+              <div className="worker-dashboard-avatar-img-container">
+                <img src={userAvatar} alt="Profile" className="worker-dashboard-avatar-img" />
+              </div>
+            ) : (
+              <div className="worker-dashboard-avatar-fallback">{userInitials}</div>
+            )}
+            <div className="worker-dashboard-greeting-text">
+              <h1 className="worker-dashboard-title">Worker Dashboard</h1>
+              <p className="worker-dashboard-subtitle">
+                Welcome back, <strong>{userName || 'Worker'}</strong>! Manage and track your assigned jobs.
+              </p>
+            </div>
+          </div>
         </header>
 
         {loading ? (

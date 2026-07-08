@@ -354,3 +354,64 @@
 @keyframes worker-job-image-spin {
   to { transform: rotate(360deg); }
 }
+
+/* Worker Dashboard Welcome Avatar Styles */
+.worker-dashboard-welcome-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  background: var(--color-white);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-light-gray);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-6);
+}
+
+.worker-dashboard-avatar-img-container {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--color-mid-gray);
+  background: var(--color-off-white);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.worker-dashboard-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.worker-dashboard-avatar-fallback {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.worker-dashboard-greeting-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 600px) {
+  .worker-dashboard-welcome-section {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-5);
+  }
+}
+
