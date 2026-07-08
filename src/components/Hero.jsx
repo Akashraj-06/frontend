@@ -1,26 +1,8 @@
-import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import heroImg from '../assets/hero.png';
 import '../styles/Hero.css';
 
 export default function Hero() {
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    // Force autoplay on mount
-    video.play().catch(() => {
-      // Autoplay was prevented — wait for user interaction
-      const playOnInteraction = () => {
-        video.play().catch(() => {});
-        document.removeEventListener('click', playOnInteraction);
-        document.removeEventListener('touchstart', playOnInteraction);
-      };
-      document.addEventListener('click', playOnInteraction, { once: true });
-      document.addEventListener('touchstart', playOnInteraction, { once: true });
-    });
-  }, []);
-
   return (
     <section className="hero" id="hero" aria-label="Hero section">
       <div className="hero__inner container">
@@ -84,7 +66,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT — Video Panel */}
+        {/* RIGHT — Visual Panel */}
         <div className="hero__visual" aria-hidden="true">
           {/* Floating Location Pins */}
           <div className="hero__pin hero__pin--1">
@@ -102,23 +84,16 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Video Wrapper */}
-          <div className="hero__video-wrapper">
-            <video
-              ref={videoRef}
-              className="hero__video"
-              src="/hero-video.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-label="Fixly hero animation showing service workers in action"
-            >
-              <source src="/hero-video.mp4" type="video/mp4" />
-              {/* Fallback */}
-              <img src="/fallback-hero.jpg" alt="Fixly service workers in a modern city" />
-            </video>
+          {/* Image Wrapper */}
+          <div className="hero__image-wrapper">
+            <img
+              className="hero__image"
+              src={heroImg}
+              alt="Fixly service workers in action"
+            />
+            {/* Gradient mask & warm overlay */}
+            <div className="hero__overlay-gradient" />
+            <div className="hero__overlay-warm" />
           </div>
         </div>
       </div>
