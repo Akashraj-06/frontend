@@ -59,6 +59,10 @@ export default function WorkerDashboard() {
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(null); // Tracks ID of job currently being processed
 
+  const [userName, setUserName] = useState('');
+  const [userAvatar, setUserAvatar] = useState(null);
+  const [userInitials, setUserInitials] = useState('?');
+
   const [dialogConfig, setDialogConfig] = useState({
     isOpen: false,
     title: '',
