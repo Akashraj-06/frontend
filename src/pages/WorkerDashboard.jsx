@@ -8,9 +8,30 @@ import '../styles/WorkerDashboard.css';
 function JobImage({ src }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  const handleClick = () => {
-    window.open(src, '_blank', 'noopener,noreferrer');
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isLightboxOpen]);
+
+  const handleOpen = () => {
+    setIsLightboxOpen(true);
+  };
+
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setIsLightboxOpen(false);
   };
 
   return (
@@ -18,8 +39,8 @@ function JobImage({ src }) {
       <span className="worker-job-image-label">Request Image</span>
       <div 
         className="worker-job-image-card" 
-        onClick={handleClick}
-        title="Click to view full image in a new tab"
+        onClick={handleOpen}
+        title="Click to view full image"
       >
         {loading && !error && (
           <div className="worker-job-image-fallback loading">
@@ -44,6 +65,30 @@ function JobImage({ src }) {
           style={{ display: (loading || error) ? 'none' : 'block' }}
         />
       </div>
+
+      {isLightboxOpen && (
+        <div 
+          className="worker-job-lightbox" 
+          onClick={handleClose}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="worker-job-lightbox__content" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="worker-job-lightbox__close" 
+              onClick={handleClose}
+              aria-label="Close image viewer"
+            >
+              &times;
+            </button>
+            <img 
+              src={src} 
+              alt="Service Request Full View" 
+              className="worker-job-lightbox__img" 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
