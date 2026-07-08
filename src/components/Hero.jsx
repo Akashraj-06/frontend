@@ -23,8 +23,44 @@ export default function Hero() {
 
   return (
     <section className="hero" id="hero" aria-label="Hero section">
+      {/* Full-width background video */}
+      <video
+        ref={videoRef}
+        className="hero__bg-video"
+        src="/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-label="Fixly hero animation showing service workers in action"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+        {/* Fallback */}
+        <img src="/fallback-hero.jpg" alt="Fixly service workers in a modern city" />
+      </video>
+
+      {/* Gradient overlay — white on left, fades to transparent */}
+      <div className="hero__overlay-gradient" aria-hidden="true" />
+
+      {/* Floating Location Pins */}
+      <div className="hero__pin hero__pin--1" aria-hidden="true">
+        <div className="hero__pin-inner">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+      </div>
+      <div className="hero__pin hero__pin--2" aria-hidden="true">
+        <div className="hero__pin-inner">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+      </div>
+
+      {/* Text content layered on top */}
       <div className="hero__inner container">
-        {/* LEFT — Text Content */}
         <div className="hero__content">
           {/* Trust Badge */}
           <div className="hero__badge" role="status" aria-label="Trust badge">
@@ -81,47 +117,6 @@ export default function Hero() {
                 <span className="hero__trust-sub">Pay after service</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* RIGHT — Visual Panel */}
-        <div className="hero__visual" aria-hidden="true">
-          {/* Floating Location Pins */}
-          <div className="hero__pin hero__pin--1">
-            <div className="hero__pin-inner">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-            </div>
-          </div>
-          <div className="hero__pin hero__pin--2">
-            <div className="hero__pin-inner">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-            </div>
-          </div>
-
-          {/* Video Wrapper */}
-          <div className="hero__video-wrapper">
-            <video
-              ref={videoRef}
-              className="hero__video"
-              src="/hero-video.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-label="Fixly hero animation showing service workers in action"
-            >
-              <source src="/hero-video.mp4" type="video/mp4" />
-              {/* Fallback */}
-              <img src="/fallback-hero.jpg" alt="Fixly service workers in a modern city" />
-            </video>
-            {/* Gradient mask & warm overlay */}
-            <div className="hero__overlay-gradient" />
-            <div className="hero__overlay-warm" />
           </div>
         </div>
       </div>

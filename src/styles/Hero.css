@@ -1,32 +1,87 @@
 /* ============================================================
    HERO SECTION — Fixly
-   Full-width hero: left text content + right video panel
+   Full-width background video with text layered on top
    ============================================================ */
 
 .hero {
+  position: relative;
   min-height: 100vh;
   padding-top: var(--navbar-height);
-  position: relative;
   overflow: hidden;
-  background: var(--color-white);
+  background: var(--color-black); /* fallback while video loads */
 }
 
-.hero__inner {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  min-height: calc(100vh - var(--navbar-height));
-  gap: 48px;
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ============================================================
-   LEFT PANEL
+   FULL-WIDTH BACKGROUND VIDEO
+   ============================================================ */
+.hero__bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  opacity: 1;
+  filter: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   GRADIENT OVERLAY
+   White on the left side → fully transparent at ~38%
+   Improves text readability without hiding the video
+   ============================================================ */
+.hero__overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.35) 22%,
+    rgba(255, 255, 255, 0.08) 42%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ============================================================
+   INNER CONTAINER — holds text content only
+   ============================================================ */
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  min-height: calc(100vh - var(--navbar-height));
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   TEXT CONTENT PANEL — left-aligned, ~40% width on desktop
    ============================================================ */
 .hero__content {
+  width: 42%;
+  max-width: 560px;
   padding: 60px 0;
+  position: relative;
+  top: -30px;
   animation: fadeInLeft 0.7s ease both;
 }
 
@@ -59,27 +114,23 @@
 .hero__headline {
   font-size: clamp(38px, 4.5vw, 56px);
   font-weight: var(--weight-black);
-  color: var(--color-black);
+  color: #000;
   line-height: 1.1;
   letter-spacing: -0.025em;
   margin-bottom: 20px;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.35);
   animation: fadeInUp 0.6s 0.1s ease both;
-}
-
-.hero__headline-accent {
-  color: var(--color-black);
-  position: relative;
-  display: inline;
 }
 
 /* Description */
 .hero__description {
   font-size: var(--text-lg);
-  font-weight: var(--weight-regular);
-  color: var(--color-text-secondary);
+  font-weight: var(--weight-medium);
+  color: #2b2b2b;
   line-height: 1.6;
   max-width: 440px;
   margin-bottom: 36px;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.35);
   animation: fadeInUp 0.6s 0.2s ease both;
 }
 
@@ -174,170 +225,32 @@
 
 .hero__trust-sub {
   font-size: 11px;
-  color: var(--color-text-tertiary);
+  font-weight: var(--weight-medium);
+  color: #333;
   line-height: 1.2;
 }
 
 /* ============================================================
-   RIGHT PANEL — Visual (Image & Overlays)
+   FLOATING LOCATION PINS
+   Positioned relative to the hero section
    ============================================================ */
-.hero__visual {
-  position: relative;
-  height: calc(100vh - var(--navbar-height));
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  animation: fadeInRight 0.7s 0.15s ease both;
-}
-
-.hero__video-wrapper,
-.hero__image-wrapper {
-  position: absolute;
-  top: -40px; /* Extends slightly outside container at the top */
-  bottom: -40px; /* Extends slightly outside container at the bottom */
-  right: calc((100vw - 100%) / -2); /* Spans directly to the right viewport edge */
-  width: calc(50vw + 50% + 40px); /* Spans to the right edge with bleed */
-  overflow: hidden;
-  border-radius: 0; /* Remove border radius */
-  box-shadow: none; /* Remove heavy shadow */
-}
-
-.hero__video,
-.hero__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 1;
-  filter: none;
-}
-
-/* Gradient mask to blend into white background on the left */
-.hero__overlay-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    var(--color-white) 0%,
-    rgba(255, 255, 255, 0.9) 8%,
-    rgba(255, 255, 255, 0.4) 18%,
-    transparent 30%
-  );
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Subtle warm/light overlay matching the sunlit design grading */
-.hero__overlay-warm {
-  position: absolute;
-  inset: 0;
-  background: rgba(251, 191, 36, 0.015); /* Subtle warm amber tint */
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Accepted Card — floating at bottom */
-.hero__accepted-card {
-  position: absolute;
-  bottom: 40px;
-  right: -20px;
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 260px;
-  border: 1px solid var(--color-mid-gray);
-  animation: slideInUp 0.7s 0.8s ease both;
-  z-index: 10;
-}
-
-.hero__accepted-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.hero__accepted-online {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 10px;
-  height: 10px;
-  background: #22c55e;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-
-.hero__accepted-info {
-  flex: 1;
-}
-
-.hero__accepted-name {
-  font-size: var(--text-base);
-  font-weight: var(--weight-bold);
-  color: var(--color-black);
-  line-height: 1.2;
-  margin-bottom: 3px;
-}
-
-.hero__accepted-meta {
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
-}
-
-.hero__accepted-meta span {
-  color: #22c55e;
-  font-weight: var(--weight-semibold);
-}
-
-.hero__accepted-btn {
-  font-size: 12px;
-  font-weight: var(--weight-semibold);
-  color: var(--color-black);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-  padding: 8px 14px;
-  border-radius: var(--radius-capsule);
-  border: 1.5px solid var(--color-border-gray);
-  background: var(--color-white);
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-}
-
-.hero__accepted-btn:hover {
-  background: var(--color-light-gray);
-  border-color: var(--color-black);
-}
-
-/* Location Pins floating animation */
 .hero__pin {
   position: absolute;
   animation: float 3s ease-in-out infinite;
-  z-index: 5;
+  z-index: 3;
   pointer-events: none;
+  opacity: 0.85;
 }
 
 .hero__pin--1 {
-  top: 20%;
-  right: 35%;
+  top: 25%;
+  right: 30%;
   animation-delay: 0s;
 }
 
 .hero__pin--2 {
-  top: 40%;
-  right: 20%;
+  top: 55%;
+  right: 15%;
   animation-delay: 1.2s;
 }
 
@@ -372,52 +285,42 @@
 }
 
 /* ============================================================
-   Responsive
+   Responsive — Tablet (≤ 1024px)
    ============================================================ */
 @media (max-width: 1024px) {
-  .hero__inner {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  .hero__content {
-    padding: 40px 0 0;
-    z-index: 10;
-  }
-
-  .hero__visual {
-    height: 50vh;
-    min-height: 300px;
-    max-height: 520px;
-    margin-top: 20px;
-  }
-
-  .hero__video-wrapper,
-  .hero__image-wrapper {
-    position: relative;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 100vw;
-    margin-left: calc((100vw - 100%) / -2);
-    margin-right: calc((100vw - 100%) / -2);
-    height: 100%;
-  }
-
   .hero__overlay-gradient {
     background: linear-gradient(
       to bottom,
-      var(--color-white) 0%,
-      rgba(255, 255, 255, 0.8) 12%,
-      transparent 35%
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(255, 255, 255, 0.35) 22%,
+      rgba(255, 255, 255, 0.08) 42%,
+      transparent 55%
     );
   }
 
-  .hero__accepted-card {
-    bottom: 20px;
-    right: 20px;
+  .hero__inner {
+    align-items: flex-start;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    min-height: calc(100vh - var(--navbar-height));
+  }
+
+  .hero__content {
+    width: 100%;
+    max-width: 100%;
+    padding: 40px 0 200px;
+  }
+
+  .hero__pin--1 {
+    top: auto;
+    bottom: 30%;
+    right: 10%;
+  }
+
+  .hero__pin--2 {
+    top: auto;
+    bottom: 15%;
+    right: 30%;
   }
 
   .hero__trust {
@@ -425,6 +328,9 @@
   }
 }
 
+/* ============================================================
+   Responsive — Mobile (≤ 600px)
+   ============================================================ */
 @media (max-width: 600px) {
   .hero__headline {
     font-size: 34px;
@@ -450,11 +356,15 @@
     gap: 14px;
   }
 
-  .hero__accepted-card {
-    right: 0;
-    min-width: unset;
-    width: calc(100% - 32px);
-    left: 16px;
+  .hero__content {
+    padding: 40px 0 160px;
+  }
+
+  .hero__pin--1 {
+    right: 5%;
+  }
+
+  .hero__pin--2 {
+    right: 20%;
   }
 }
-
