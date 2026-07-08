@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createServiceRequest } from '../api/booking';
 import '../styles/BookingModal.css';
+import ImageUploader from './ImageUploader';
 
 export default function BookingModal({ isOpen, onClose, worker, location }) {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function BookingModal({ isOpen, onClose, worker, location }) {
     description: '',
     address: '',
   });
+  const [photoUrl, setPhotoUrl] = useState('');
 
   if (!isOpen || !worker) return null;
 
@@ -26,6 +28,9 @@ export default function BookingModal({ isOpen, onClose, worker, location }) {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    // Log the uploaded image URL from component state
+    console.log('photoUrl:', photoUrl);
 
     try {
       const payload = {
@@ -105,6 +110,11 @@ export default function BookingModal({ isOpen, onClose, worker, location }) {
                 placeholder="Flat no, Street name, Area"
                 disabled={loading || success}
               />
+            </div>
+
+            <div className="modal-form-group">
+              <label className="modal-label">Upload Image</label>
+              <ImageUploader onUploadSuccess={setPhotoUrl} />
             </div>
           </form>
         </div>
