@@ -64,6 +64,7 @@ export default function Login() {
           name: response.name,
           email: response.email,
           role: response.role,
+          profileImageUrl: response.profileImageUrl || ''
         })
       );
 
