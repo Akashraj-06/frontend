@@ -4,42 +4,19 @@ import Navbar from '../components/Navbar';
 import { getMyBookings } from '../api/booking';
 import { submitRating } from '../api/rating';
 import '../styles/Bookings.css';
+import ImageLightbox from '../components/ImageLightbox';
 
 function BookingImage({ src }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLightboxOpen) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setIsLightboxOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isLightboxOpen]);
-
-  const handleOpen = () => {
-    setIsLightboxOpen(true);
-  };
-
-  const handleClose = (e) => {
-    e.stopPropagation();
-    setIsLightboxOpen(false);
-  };
-
   return (
     <div className="booking-image-container">
       <span className="booking-image-label">Request Image</span>
       <div 
         className="booking-image-card" 
-        onClick={handleOpen}
+        onClick={() => setIsLightboxOpen(true)}
         title="Click to view full image"
       >
         {loading && !error && (
@@ -66,29 +43,11 @@ function BookingImage({ src }) {
         />
       </div>
 
-      {isLightboxOpen && (
-        <div 
-          className="booking-lightbox" 
-          onClick={handleClose}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="booking-lightbox__content" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="booking-lightbox__close" 
-              onClick={handleClose}
-              aria-label="Close image viewer"
-            >
-              &times;
-            </button>
-            <img 
-              src={src} 
-              alt="Service Request Full View" 
-              className="booking-lightbox__img" 
-            />
-          </div>
-        </div>
-      )}
+      <ImageLightbox
+        src={src}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+      />
     </div>
   );
 }

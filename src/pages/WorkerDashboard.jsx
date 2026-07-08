@@ -4,42 +4,19 @@ import Navbar from '../components/Navbar';
 import CustomDialog from '../components/CustomDialog';
 import { getWorkerJobs, acceptJob, completeJob } from '../api/job';
 import '../styles/WorkerDashboard.css';
+import ImageLightbox from '../components/ImageLightbox';
 
 function JobImage({ src }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLightboxOpen) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setIsLightboxOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isLightboxOpen]);
-
-  const handleOpen = () => {
-    setIsLightboxOpen(true);
-  };
-
-  const handleClose = (e) => {
-    e.stopPropagation();
-    setIsLightboxOpen(false);
-  };
-
   return (
     <div className="worker-job-image-container">
       <span className="worker-job-image-label">Request Image</span>
       <div 
         className="worker-job-image-card" 
-        onClick={handleOpen}
+        onClick={() => setIsLightboxOpen(true)}
         title="Click to view full image"
       >
         {loading && !error && (
@@ -66,29 +43,11 @@ function JobImage({ src }) {
         />
       </div>
 
-      {isLightboxOpen && (
-        <div 
-          className="worker-job-lightbox" 
-          onClick={handleClose}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="worker-job-lightbox__content" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="worker-job-lightbox__close" 
-              onClick={handleClose}
-              aria-label="Close image viewer"
-            >
-              &times;
-            </button>
-            <img 
-              src={src} 
-              alt="Service Request Full View" 
-              className="worker-job-lightbox__img" 
-            />
-          </div>
-        </div>
-      )}
+      <ImageLightbox
+        src={src}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+      />
     </div>
   );
 }
