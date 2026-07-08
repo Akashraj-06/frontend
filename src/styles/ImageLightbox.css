@@ -3,58 +3,63 @@
    Constrained strictly by the viewport dimensions
    ============================================================ */
 .image-lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* Higher z-index to avoid layout interference */
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important; /* Higher z-index to avoid layout interference */
   animation: lightbox-fade-in 0.25s ease forwards;
-  padding: var(--spacing-6);
-  cursor: zoom-out;
+  padding: var(--spacing-6) !important;
+  cursor: zoom-out !important;
+  width: 100vw !important;
+  height: 100vh !important;
 }
 
-.image-lightbox-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.image-lightbox-overlay .image-lightbox-content {
+  position: relative !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   animation: lightbox-scale-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  cursor: default;
-}
-
-.image-lightbox-image {
-  max-width: 90vw;
-  max-height: 90vh;
+  cursor: default !important;
   width: auto !important;
   height: auto !important;
-  object-fit: contain;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-xl);
-  border: 2px solid var(--color-white);
-  background-color: var(--color-black);
-  display: block;
 }
 
-.image-lightbox-close {
-  position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
-  border: none;
-  color: var(--color-white);
-  font-size: 32px;
-  cursor: pointer;
-  line-height: 1;
+.image-lightbox-overlay .image-lightbox-image {
+  width: auto !important;
+  height: auto !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  object-fit: contain !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border: 2px solid var(--color-white) !important;
+  background-color: var(--color-black) !important;
+  display: block !important;
+}
+
+.image-lightbox-overlay .image-lightbox-close {
+  position: absolute !important;
+  top: -40px !important;
+  right: 0 !important;
+  background: none !important;
+  border: none !important;
+  color: var(--color-white) !important;
+  font-size: 32px !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
   transition: color var(--transition-fast), transform var(--transition-fast);
+  z-index: 10000 !important;
 }
 
-.image-lightbox-close:hover {
-  color: var(--color-light-gray);
-  transform: scale(1.1);
+.image-lightbox-overlay .image-lightbox-close:hover {
+  color: var(--color-light-gray) !important;
+  transform: scale(1.1) !important;
 }
 
 @keyframes lightbox-fade-in {
@@ -68,17 +73,17 @@
 }
 
 @media (max-width: 768px) {
-  .image-lightbox-content {
-    max-width: 95vw;
-    max-height: 95vh;
+  .image-lightbox-overlay .image-lightbox-content {
+    max-width: 95vw !important;
+    max-height: 95vh !important;
   }
-  .image-lightbox-image {
-    max-width: 95vw;
-    max-height: 80vh;
+  .image-lightbox-overlay .image-lightbox-image {
+    max-width: 95vw !important;
+    max-height: 80vh !important;
   }
-  .image-lightbox-close {
-    top: -45px;
-    right: 5px;
-    font-size: 36px;
+  .image-lightbox-overlay .image-lightbox-close {
+    top: -45px !important;
+    right: 5px !important;
+    font-size: 36px !important;
   }
 }
