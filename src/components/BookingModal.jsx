@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createServiceRequest } from '../api/booking';
+import { getProfile } from '../api/profile';
 import '../styles/BookingModal.css';
 import ImageUploader from './ImageUploader';
 
@@ -15,6 +16,39 @@ export default function BookingModal({ isOpen, onClose, worker, location }) {
     address: '',
   });
   const [photoUrl, setPhotoUrl] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Cache-first: read address from localStorage to avoid an API round-trip.
+    // The cache is written by Login.jsx on sign-in and by Profile.jsx on save,
+    // so it is always up-to-date for users who have logged in after this patch.
+    try {
+      const cachedUserStr = localStorage.getItem('user');
+      if (cachedUserStr) {
+        const cachedUser = JSON.parse(cachedUserStr);
+        if (cachedUser.address) {
+          setForm(prev => ({ ...prev, address: cachedUser.address }));
+          return; // cache hit — no API call needed
+        }
+      }
+    } catch {
+      // Corrupt localStorage value — fall through to API
+    }
+
+    // API fallback: covers users whose localStorage predates the address cache.
+    const fetchProfileAddress = async () => {
+      try {
+        const profile = await getProfile();
+        if (profile && profile.address) {
+          setForm(prev => ({ ...prev, address: profile.address }));
+        }
+      } catch (err) {
+        console.warn('Failed to load profile address default value:', err);
+      }
+    };
+    fetchProfileAddress();
+  }, [isOpen]);
 
   if (!isOpen || !worker) return null;
 

@@ -160,6 +160,7 @@ export default function Profile() {
         const cachedUser = JSON.parse(cachedUserStr);
         cachedUser.name = updatedProfile.name;
         cachedUser.profileImageUrl = updatedProfile.profileImageUrl;
+        cachedUser.address = updatedProfile.address || '';
         localStorage.setItem('user', JSON.stringify(cachedUser));
       }
 
