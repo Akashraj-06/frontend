@@ -29,14 +29,14 @@ export default function ImageLightbox({ src, alt = "Service Request Full View", 
 
   return (
     <div 
-      className="image-lightbox" 
+      className="image-lightbox-overlay" 
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
     >
-      <div className="image-lightbox__content" onClick={handleContentClick}>
+      <div className="image-lightbox-content" onClick={handleContentClick}>
         <button 
-          className="image-lightbox__close" 
+          className="image-lightbox-close" 
           onClick={onClose}
           aria-label="Close image viewer"
         >
@@ -45,7 +45,7 @@ export default function ImageLightbox({ src, alt = "Service Request Full View", 
         <img 
           src={src} 
           alt={alt} 
-          className="image-lightbox__img" 
+          className="image-lightbox-image" 
         />
       </div>
     </div>

@@ -1,20 +1,21 @@
 /* ============================================================
    Image Lightbox Reusable Component Styles
+   Constrained strictly by the viewport dimensions
    ============================================================ */
-.image-lightbox {
+.image-lightbox-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 9999; /* Higher z-index to avoid layout interference */
   animation: lightbox-fade-in 0.25s ease forwards;
   padding: var(--spacing-6);
   cursor: zoom-out;
 }
 
-.image-lightbox__content {
+.image-lightbox-content {
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
@@ -25,17 +26,20 @@
   cursor: default;
 }
 
-.image-lightbox__img {
+.image-lightbox-image {
   max-width: 90vw;
-  max-height: 85vh;
+  max-height: 90vh;
+  width: auto !important;
+  height: auto !important;
   object-fit: contain;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
   border: 2px solid var(--color-white);
   background-color: var(--color-black);
+  display: block;
 }
 
-.image-lightbox__close {
+.image-lightbox-close {
   position: absolute;
   top: -40px;
   right: 0;
@@ -48,7 +52,7 @@
   transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
-.image-lightbox__close:hover {
+.image-lightbox-close:hover {
   color: var(--color-light-gray);
   transform: scale(1.1);
 }
@@ -64,14 +68,15 @@
 }
 
 @media (max-width: 768px) {
-  .image-lightbox__content {
+  .image-lightbox-content {
     max-width: 95vw;
+    max-height: 95vh;
   }
-  .image-lightbox__img {
+  .image-lightbox-image {
     max-width: 95vw;
     max-height: 80vh;
   }
-  .image-lightbox__close {
+  .image-lightbox-close {
     top: -45px;
     right: 5px;
     font-size: 36px;
