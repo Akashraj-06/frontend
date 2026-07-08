@@ -38,7 +38,8 @@ export default function BookingModal({ isOpen, onClose, worker, location }) {
         description: form.description,
         address: form.address,
         latitude: Number(location.lat),
-        longitude: Number(location.lng)
+        longitude: Number(location.lng),
+        photoUrl: photoUrl || null
       };
 
       await createServiceRequest(payload);

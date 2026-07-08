@@ -5,6 +5,49 @@ import CustomDialog from '../components/CustomDialog';
 import { getWorkerJobs, acceptJob, completeJob } from '../api/job';
 import '../styles/WorkerDashboard.css';
 
+function JobImage({ src }) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const handleClick = () => {
+    window.open(src, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div className="worker-job-image-container">
+      <span className="worker-job-image-label">Request Image</span>
+      <div 
+        className="worker-job-image-card" 
+        onClick={handleClick}
+        title="Click to view full image in a new tab"
+      >
+        {loading && !error && (
+          <div className="worker-job-image-fallback loading">
+            <span className="worker-job-image-fallback__spinner" />
+            <span>Loading image...</span>
+          </div>
+        )}
+        {error && (
+          <div className="worker-job-image-fallback error">
+            <span>⚠️ Failed to load image</span>
+          </div>
+        )}
+        <img
+          src={src}
+          alt="Service Request"
+          className="worker-job-image"
+          onLoad={() => setLoading(false)}
+          onError={() => {
+            setError(true);
+            setLoading(false);
+          }}
+          style={{ display: (loading || error) ? 'none' : 'block' }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function WorkerDashboard() {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
@@ -233,6 +276,8 @@ export default function WorkerDashboard() {
                           </div>
                         )}
                       </div>
+
+                      {job.photoUrl && <JobImage src={job.photoUrl} />}
 
                       {/* Actions */}
                       {job.status === 'PENDING' && (
