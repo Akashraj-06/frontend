@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import '../styles/ImageLightbox.css';
 
 export default function ImageLightbox({ src, alt = "Service Request Full View", isOpen, onClose }) {
@@ -19,22 +20,14 @@ export default function ImageLightbox({ src, alt = "Service Request Full View", 
 
   if (!isOpen) return null;
 
-  const handleOverlayClick = () => {
-    onClose();
-  };
-
-  const handleContentClick = (e) => {
-    e.stopPropagation();
-  };
-
-  return (
+  const overlay = (
     <div 
       className="image-lightbox-overlay" 
-      onClick={handleOverlayClick}
+      onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
-      <div className="image-lightbox-content" onClick={handleContentClick}>
+      <div className="image-lightbox-content" onClick={(e) => e.stopPropagation()}>
         <button 
           className="image-lightbox-close" 
           onClick={onClose}
@@ -50,4 +43,6 @@ export default function ImageLightbox({ src, alt = "Service Request Full View", 
       </div>
     </div>
   );
+
+  return createPortal(overlay, document.body);
 }
