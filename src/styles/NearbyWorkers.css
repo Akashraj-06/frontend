@@ -175,6 +175,13 @@
   flex-shrink: 0;
 }
 
+/* Photo variant — used when the worker has an uploaded profile image */
+.worker-avatar--photo {
+  object-fit: cover;
+  display: block;
+  background: var(--color-light-gray);
+}
+
 .worker-meta h3 {
   font-size: var(--text-md);
   font-weight: var(--weight-bold);

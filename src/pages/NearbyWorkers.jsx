@@ -304,7 +304,15 @@ export default function NearbyWorkers() {
             <div className="worker-card" key={worker.workerId}>
               {/* Header */}
               <div className="worker-header">
-                <div className="worker-avatar">{getInitials(worker.name)}</div>
+                {worker.profileImageUrl ? (
+                  <img
+                    className="worker-avatar worker-avatar--photo"
+                    src={worker.profileImageUrl}
+                    alt={`${worker.name} profile`}
+                  />
+                ) : (
+                  <div className="worker-avatar">{getInitials(worker.name)}</div>
+                )}
                 <div className="worker-meta">
                   <h3>{worker.name}</h3>
                   <span className="worker-category">{worker.categoryName}</span>

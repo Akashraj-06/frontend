@@ -308,6 +308,25 @@ export default function WorkerDashboard() {
 
                       {job.photoUrl && <JobImage src={job.photoUrl} />}
 
+                      {/* Customer Rating — shown only for completed jobs with a rating */}
+                      {job.status === 'COMPLETED' && job.customerRating != null && (
+                        <div className="worker-job-rating">
+                          <span className="worker-job-rating-label">⭐ Customer Rating</span>
+                          <div className="worker-job-rating-stars">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <span
+                                key={star}
+                                className={star <= job.customerRating ? 'worker-rating-star-filled' : 'worker-rating-star-empty'}
+                                aria-hidden="true"
+                              >
+                                {star <= job.customerRating ? '★' : '☆'}
+                              </span>
+                            ))}
+                            <span className="worker-job-rating-value">{job.customerRating}.0 / 5</span>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Actions */}
                       {job.status === 'PENDING' && (
                         <div className="worker-job-actions">
