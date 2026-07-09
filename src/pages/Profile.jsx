@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { getProfile, updateProfile } from '../api/profile';
+import { getProfile, updateProfile, changePassword } from '../api/profile';
 import { uploadImage } from '../services/uploadService';
 import '../styles/Profile.css';
 
@@ -26,6 +26,21 @@ export default function Profile() {
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
   const [validationErrors, setValidationErrors] = useState({});
+
+  // Change password state
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [passwordStatus, setPasswordStatus] = useState({ type: '', message: '' });
+  const [passwordErrors, setPasswordErrors] = useState({});
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -178,6 +193,77 @@ export default function Profile() {
     }
   };
 
+  // ── Change Password ──────────────────────────────────────────────
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({ ...prev, [name]: value }));
+    if (passwordErrors[name]) {
+      setPasswordErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validatePasswordForm = () => {
+    const errors = {};
+    if (!passwordForm.currentPassword.trim()) {
+      errors.currentPassword = 'Current password is required';
+    }
+    if (!passwordForm.newPassword.trim()) {
+      errors.newPassword = 'New password is required';
+    } else if (passwordForm.newPassword.length < 8) {
+      errors.newPassword = 'New password must be at least 8 characters';
+    } else if (!/[A-Z]/.test(passwordForm.newPassword)) {
+      errors.newPassword = 'New password must contain at least one uppercase letter';
+    } else if (!/[a-z]/.test(passwordForm.newPassword)) {
+      errors.newPassword = 'New password must contain at least one lowercase letter';
+    } else if (!/\d/.test(passwordForm.newPassword)) {
+      errors.newPassword = 'New password must contain at least one number';
+    }
+    if (!passwordForm.confirmPassword.trim()) {
+      errors.confirmPassword = 'Please confirm your new password';
+    } else if (
+      !errors.newPassword &&
+      passwordForm.newPassword !== passwordForm.confirmPassword
+    ) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+    setPasswordErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!validatePasswordForm()) return;
+
+    setPasswordSaving(true);
+    setPasswordStatus({ type: '', message: '' });
+
+    try {
+      const result = await changePassword({
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+        confirmPassword: passwordForm.confirmPassword
+      });
+      setPasswordStatus({ type: 'success', message: result.message || 'Password changed successfully' });
+      // Clear all password fields on success
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setPasswordErrors({});
+      setShowPassword({ current: false, new: false, confirm: false });
+    } catch (err) {
+      let msg = 'Failed to change password. Please try again.';
+      if (err.response?.data?.message) {
+        msg = err.response.data.message;
+      }
+      setPasswordStatus({ type: 'error', message: msg });
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
+  const toggleShowPassword = (field) => {
+    setShowPassword(prev => ({ ...prev, [field]: !prev[field] }));
+  };
+  // ────────────────────────────────────────────────────────────────
+
   if (loading) {
     return (
       <div className="profile-page">
@@ -305,16 +391,16 @@ export default function Profile() {
             </div>
 
             <div className="profile-actions">
-              <button 
-                type="button" 
-                className="btn-profile-back" 
+              <button
+                type="button"
+                className="btn-profile-back"
                 onClick={() => navigate(dashboardPath)}
               >
                 Back to Dashboard
               </button>
-              
-              <button 
-                type="submit" 
+
+              <button
+                type="submit"
                 className="btn-profile-save"
                 disabled={saving || uploading}
               >
@@ -322,6 +408,120 @@ export default function Profile() {
               </button>
             </div>
           </form>
+
+          {/* ── Change Password Section ─────────────────────────── */}
+          <div className="profile-password-section">
+            <h2 className="profile-password-title">Change Password</h2>
+
+            {passwordStatus.message && (
+              <div className={`profile-alert ${passwordStatus.type}`}>
+                {passwordStatus.type === 'success' ? '✓' : '⚠️'} {passwordStatus.message}
+              </div>
+            )}
+
+            <form className="profile-form" onSubmit={handlePasswordSubmit} noValidate>
+              {/* Current Password */}
+              <div className="form-group">
+                <label className="form-label" htmlFor="pwd-current">Current Password</label>
+                <div className="profile-password-input-wrapper">
+                  <input
+                    id="pwd-current"
+                    name="currentPassword"
+                    type={showPassword.current ? 'text' : 'password'}
+                    className="form-input"
+                    value={passwordForm.currentPassword}
+                    onChange={handlePasswordChange}
+                    disabled={passwordSaving}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="profile-pwd-toggle"
+                    onClick={() => toggleShowPassword('current')}
+                    aria-label={showPassword.current ? 'Hide password' : 'Show password'}
+                    tabIndex={-1}
+                  >
+                    {showPassword.current ? '🙈' : '👁️'}
+                  </button>
+                </div>
+                {passwordErrors.currentPassword && (
+                  <span className="profile-form-error">{passwordErrors.currentPassword}</span>
+                )}
+              </div>
+
+              {/* New Password */}
+              <div className="form-group">
+                <label className="form-label" htmlFor="pwd-new">New Password</label>
+                <div className="profile-password-input-wrapper">
+                  <input
+                    id="pwd-new"
+                    name="newPassword"
+                    type={showPassword.new ? 'text' : 'password'}
+                    className="form-input"
+                    value={passwordForm.newPassword}
+                    onChange={handlePasswordChange}
+                    disabled={passwordSaving}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    className="profile-pwd-toggle"
+                    onClick={() => toggleShowPassword('new')}
+                    aria-label={showPassword.new ? 'Hide password' : 'Show password'}
+                    tabIndex={-1}
+                  >
+                    {showPassword.new ? '🙈' : '👁️'}
+                  </button>
+                </div>
+                {passwordErrors.newPassword && (
+                  <span className="profile-form-error">{passwordErrors.newPassword}</span>
+                )}
+                <span className="profile-pwd-hint">
+                  Min 8 characters · Uppercase · Lowercase · Number
+                </span>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="form-group">
+                <label className="form-label" htmlFor="pwd-confirm">Confirm Password</label>
+                <div className="profile-password-input-wrapper">
+                  <input
+                    id="pwd-confirm"
+                    name="confirmPassword"
+                    type={showPassword.confirm ? 'text' : 'password'}
+                    className="form-input"
+                    value={passwordForm.confirmPassword}
+                    onChange={handlePasswordChange}
+                    disabled={passwordSaving}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    className="profile-pwd-toggle"
+                    onClick={() => toggleShowPassword('confirm')}
+                    aria-label={showPassword.confirm ? 'Hide password' : 'Show password'}
+                    tabIndex={-1}
+                  >
+                    {showPassword.confirm ? '🙈' : '👁️'}
+                  </button>
+                </div>
+                {passwordErrors.confirmPassword && (
+                  <span className="profile-form-error">{passwordErrors.confirmPassword}</span>
+                )}
+              </div>
+
+              <div className="profile-actions">
+                <button
+                  type="submit"
+                  className="btn-profile-save"
+                  disabled={passwordSaving}
+                >
+                  {passwordSaving ? 'Changing...' : 'Change Password'}
+                </button>
+              </div>
+            </form>
+          </div>
+          {/* ────────────────────────────────────────────────────── */}
         </div>
       </main>
     </div>

@@ -18,4 +18,15 @@ export const updateProfile = async (data) => {
   const response = await api.put('/profile', data);
   return response.data;
 };
-export default { getProfile, updateProfile };
+
+/**
+ * Changes the authenticated user's password.
+ * @param {{ currentPassword: string, newPassword: string, confirmPassword: string }} data
+ * @returns {Promise} Resolves with { message: string }
+ */
+export const changePassword = async (data) => {
+  const response = await api.post('/profile/change-password', data);
+  return response.data;
+};
+
+export default { getProfile, updateProfile, changePassword };
